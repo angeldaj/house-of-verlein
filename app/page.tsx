@@ -4,6 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
+import { Reveal, Stagger, Item } from "@/components/motion/reveal";
 
 export default function HomePage() {
   return (
@@ -52,125 +53,126 @@ export default function HomePage() {
 
       {/* Hero */}
       <main>
-        <section className="relative overflow-hidden">
-          {/* textura suave + glows de color */}
-          <div
-            aria-hidden="true"
-            className="pointer-events-none absolute inset-0 opacity-[0.9]"
-            style={{
-              backgroundImage:
-                "radial-gradient(circle at 18% 12%, rgb(var(--glow-1) / 0.18), transparent 45%), radial-gradient(circle at 82% 28%, rgb(var(--glow-2) / 0.16), transparent 44%), radial-gradient(circle at 46% 92%, rgb(var(--glow-3) / 0.14), transparent 46%)",
-            }}
-          />
+        <Reveal>
+          <section className="relative overflow-hidden">
+            {/* textura suave + glows de color */}
+            <div
+              aria-hidden="true"
+              className="pointer-events-none absolute inset-0 opacity-[0.9] animated-background"
+              style={{
+                backgroundImage:
+                  "radial-gradient(circle at 18% 12%, rgb(var(--glow-1) / 0.18), transparent 45%), radial-gradient(circle at 82% 28%, rgb(var(--glow-2) / 0.16), transparent 44%), radial-gradient(circle at 46% 92%, rgb(var(--glow-3) / 0.14), transparent 46%)",
+              }}
+            />
 
-          <div className="mx-auto grid max-w-6xl gap-10 px-4 py-14 md:grid-cols-2 md:items-center md:py-20">
-            <div>
-              <Badge variant="secondary" className="rounded-full border border-border bg-secondary/60 px-4 py-1 text-xs">
-                Curated beats. Weekly drops.
-              </Badge>
+            <div className="mx-auto grid max-w-6xl gap-10 px-4 py-14 md:grid-cols-2 md:items-center md:py-20">
+              <div>
+                <Badge variant="secondary" className="rounded-full border border-border bg-secondary/60 px-4 py-1 text-xs">
+                  Curated beats. Weekly drops.
+                </Badge>
 
-              <h1 className="font-serif mt-5 text-4xl leading-[1.05] tracking-[-0.02em] md:text-6xl">
-                Beats premium, listos para grabar.
-              </h1>
+                <h1 className="font-serif mt-5 text-4xl leading-[1.05] tracking-[-0.02em] md:text-6xl">
+                  Beats premium, listos para grabar.
+                </h1>
 
-              <p className="mt-5 max-w-xl text-base leading-relaxed text-muted-foreground md:text-lg">
-                Suscripción mensual con acceso inmediato a un catálogo organizado y descargable. Cada semana,
-                una selección nueva llega por correo a suscriptores activos.
-              </p>
+                <p className="mt-5 max-w-xl text-base leading-relaxed text-muted-foreground md:text-lg">
+                  Suscripción mensual con acceso inmediato a un catálogo organizado y descargable. Cada semana,
+                  una selección nueva llega por correo a suscriptores activos.
+                </p>
 
-              <div className="mt-7 flex flex-wrap gap-3">
-                {/* Botón principal con gradiente suave */}
-                <Button
-                  asChild
-                  className="rounded-full px-6 bg-[linear-gradient(135deg,rgb(var(--glow-2)/0.95),rgb(var(--glow-1)/0.85))] text-foreground shadow-sm hover:opacity-95"
-                >
-                  <Link href="/billing">Ver membresía</Link>
-                </Button>
-
-                <Button
-                  asChild
-                  variant="outline"
-                  className="rounded-full px-6 border-border bg-background/60 backdrop-blur hover:bg-background"
-                >
-                  <Link href="#how">Cómo funciona</Link>
-                </Button>
-              </div>
-
-              <div className="mt-10 grid grid-cols-2 gap-3 md:grid-cols-4">
-                <MiniStat label="Acceso" value="Instantáneo" />
-                <MiniStat label="Descargas" value="Activas con plan" />
-                <MiniStat label="Catálogo" value="Curado" />
-                <MiniStat label="Email" value="Semanal" />
-              </div>
-
-              <p className="mt-6 text-xs text-muted-foreground">
-                Estética y experiencia enfocadas en artistas: pocos pasos, cero ruido.
-              </p>
-            </div>
-
-            {/* Mock card */}
-            <Card className="relative rounded-3xl border-border bg-card/70 p-6 shadow-sm">
-              <div className="flex items-start justify-between gap-3">
-                <div>
-                  <p className="text-sm font-medium tracking-tight">Drop of the Week</p>
-                  <p className="mt-1 text-xs text-muted-foreground">El beat que ha roto el mercado de la semana. ¿Que esperas a crear algo nuevo?</p>
-                </div>
-                <span className="rounded-full border border-border bg-background px-3 py-1 text-xs text-muted-foreground">
-                  142 BPM
-                </span>
-              </div>
-
-              <div className="mt-6 rounded-2xl border border-border bg-background p-5">
-                <div className="flex items-start justify-between gap-4">
-                  <div>
-                    <p className="font-serif text-xl tracking-tight">Midnight Drift</p>
-                    <p className="mt-1 text-xs text-muted-foreground">Trap • Dark • Key: Fm</p>
-                  </div>
-                  <span className="inline-flex items-center gap-2 rounded-full border border-border px-3 py-1 text-xs">
-                    {/* Dot de “featured” con color joya */}
-                    <span className="h-2 w-2 rounded-full bg-[rgb(var(--glow-1))] shadow-[0_0_0_6px_rgb(var(--glow-1)/0.12)]" />
-                    Featured
-                  </span>
-                </div>
-
-                <div className="mt-6">
-                  <div className="h-2 w-full rounded-full bg-secondary">
-                    <div className="h-2 w-[38%] rounded-full bg-foreground" />
-                  </div>
-                  <div className="mt-2 flex items-center justify-between text-xs text-muted-foreground">
-                    <span>0:34</span>
-                    <span>2:12</span>
-                  </div>
-                </div>
-
-                <div className="mt-6 grid grid-cols-2 gap-3">
-                  <Button variant="outline" className="rounded-full">
-                    Preview
+                <div className="mt-7 flex flex-wrap gap-3">
+                  {/* Botón principal con gradiente suave */}
+                  <Button
+                    asChild
+                    className="rounded-full px-6 bg-[linear-gradient(135deg,rgb(var(--glow-2)/0.95),rgb(var(--glow-1)/0.85))] text-foreground shadow-sm hover:opacity-95"
+                  >
+                    <Link href="/billing">Ver membresía</Link>
                   </Button>
 
-                  {/* Descargar con acento oro -> esmeralda */}
-                  <Button className="rounded-full bg-[linear-gradient(135deg,rgb(var(--glow-2)/0.95),rgb(var(--glow-1)/0.85))] text-foreground hover:opacity-95">
-                    Descargar
+                  <Button
+                    asChild
+                    variant="outline"
+                    className="rounded-full px-6 border-border bg-background/60 backdrop-blur hover:bg-background"
+                  >
+                    <Link href="#how">Cómo funciona</Link>
                   </Button>
                 </div>
 
-                <p className="mt-4 text-xs text-muted-foreground">
-                  Una ida al lado oscuro japones.
+                <Stagger className="mt-10 grid grid-cols-2 gap-3 md:grid-cols-4">
+                  <MiniStat label="Acceso" value="Instantáneo" />
+                  <MiniStat label="Descargas" value="Activas con plan" />
+                  <MiniStat label="Catálogo" value="Curado" />
+                  <MiniStat label="Email" value="Semanal" />
+                </Stagger>
+
+                <p className="mt-6 text-xs text-muted-foreground">
+                  Estética y experiencia enfocadas en artistas: pocos pasos, cero ruido.
                 </p>
               </div>
 
-              {/* detalle “couture”: línea con gradiente */}
-              <div
-                className="pointer-events-none absolute inset-x-6 bottom-6 h-px opacity-60"
-                style={{
-                  background:
-                    "linear-gradient(90deg, transparent, rgb(var(--glow-2) / 0.65), rgb(var(--glow-1) / 0.55), transparent)",
-                }}
-              />
-            </Card>
-          </div>
-        </section>
+              {/* Mock card */}
+              <Card className="relative rounded-3xl border-border bg-card/70 p-6 shadow-sm">
+                <div className="flex items-start justify-between gap-3">
+                  <div>
+                    <p className="text-sm font-medium tracking-tight">Drop of the Week</p>
+                    <p className="mt-1 text-xs text-muted-foreground">El beat que ha roto el mercado de la semana. ¿Que esperas a crear algo nuevo?</p>
+                  </div>
+                  <span className="rounded-full border border-border bg-background px-3 py-1 text-xs text-muted-foreground">
+                    142 BPM
+                  </span>
+                </div>
 
+                <div className="mt-6 rounded-2xl border border-border bg-background p-5">
+                  <div className="flex items-start justify-between gap-4">
+                    <div>
+                      <p className="font-serif text-xl tracking-tight">Midnight Drift</p>
+                      <p className="mt-1 text-xs text-muted-foreground">Trap • Dark • Key: Fm</p>
+                    </div>
+                    <span className="inline-flex items-center gap-2 rounded-full border border-border px-3 py-1 text-xs">
+                      {/* Dot de “featured” con color joya */}
+                      <span className="h-2 w-2 rounded-full bg-[rgb(var(--glow-1))] shadow-[0_0_0_6px_rgb(var(--glow-1)/0.12)]" />
+                      Featured
+                    </span>
+                  </div>
+
+                  <div className="mt-6">
+                    <div className="h-2 w-full rounded-full bg-secondary">
+                      <div className="h-2 w-[38%] rounded-full bg-foreground" />
+                    </div>
+                    <div className="mt-2 flex items-center justify-between text-xs text-muted-foreground">
+                      <span>0:34</span>
+                      <span>2:12</span>
+                    </div>
+                  </div>
+
+                  <div className="mt-6 grid grid-cols-2 gap-3">
+                    <Button variant="outline" className="rounded-full">
+                      Preview
+                    </Button>
+
+                    {/* Descargar con acento oro -> esmeralda */}
+                    <Button className="rounded-full bg-[linear-gradient(135deg,rgb(var(--glow-2)/0.95),rgb(var(--glow-1)/0.85))] text-foreground hover:opacity-95">
+                      Descargar
+                    </Button>
+                  </div>
+
+                  <p className="mt-4 text-xs text-muted-foreground">
+                    Una ida al lado oscuro japones.
+                  </p>
+                </div>
+
+                {/* detalle “couture”: línea con gradiente */}
+                <div
+                  className="pointer-events-none absolute inset-x-6 bottom-6 h-px opacity-60"
+                  style={{
+                    background:
+                      "linear-gradient(90deg, transparent, rgb(var(--glow-2) / 0.65), rgb(var(--glow-1) / 0.55), transparent)",
+                  }}
+                />
+              </Card>
+            </div>
+          </section>
+        </Reveal>
         {/* How */}
         <section id="how" className="border-t border-border">
           <div className="mx-auto max-w-6xl px-4 py-14">
@@ -188,12 +190,12 @@ export default function HomePage() {
               </Badge>
             </div>
 
-            <div className="mt-8 grid gap-4 md:grid-cols-2">
+            <Stagger className="mt-8 grid gap-4 md:grid-cols-2">
               <StepCard title="Cuenta" desc="Registro e inicio de sesión. Estado de suscripción sincronizado." />
               <StepCard title="Pago" desc="Checkout con Stripe y control por webhooks." />
               <StepCard title="Catálogo" desc="Búsqueda y filtros básicos para encontrar rápido." />
               <StepCard title="Descarga" desc="Enlaces temporales para proteger archivos." />
-            </div>
+            </Stagger>
           </div>
         </section>
 
