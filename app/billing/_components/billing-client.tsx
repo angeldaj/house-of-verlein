@@ -186,7 +186,7 @@ export default function BillingClient({
                 </div>
 
                 <p className="mt-4 text-xs text-muted-foreground">
-                  Los estados de suscripción se actualizan vía webhook (lo conectamos en la siguiente fase).
+                  Por favor, leer terminos y condiciones para su mayor entendimiento y claridad.
                 </p>
               </Card>
             </motion.div>
