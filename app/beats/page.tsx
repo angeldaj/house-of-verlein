@@ -40,7 +40,7 @@ export default async function BeatsPage({
 
   // MOCK: /beats?mock=NUMERO
   const mockCountRaw = asInt(sp.mock);
-  const useMock = process.env.NODE_ENV !== "production" && !!mockCountRaw && mockCountRaw > 0;
+  const useMock = !!mockCountRaw && mockCountRaw > 0;
 
   if (useMock) {
     const count = Math.min(Math.max(mockCountRaw!, 1), 200);
