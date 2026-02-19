@@ -38,15 +38,13 @@ export default async function BeatsPage({
   const bpmMax = asInt(sp.bpmMax);
   const sort = asString(sp.sort) ?? "new";
 
-  // ✅ MOCK: /beats?mock=48  (solo dev)
+  // MOCK: /beats?mock=NUMERO
   const mockCountRaw = asInt(sp.mock);
   const useMock = process.env.NODE_ENV !== "production" && !!mockCountRaw && mockCountRaw > 0;
 
   if (useMock) {
     const count = Math.min(Math.max(mockCountRaw!, 1), 200);
     let beats = makeMockBeats(count);
-
-    // filtros en memoria (para que el UI sea realista)
     const qLower = q.toLowerCase();
     beats = beats.filter((b) => {
       if (q && !`${b.title} ${b.genre ?? ""} ${b.type ?? ""} ${b.instrument ?? ""} ${b.mood ?? ""} ${b.key ?? ""}`.toLowerCase().includes(qLower)) {
@@ -64,7 +62,6 @@ export default async function BeatsPage({
     // orden
     if (sort === "bpmAsc") beats.sort((a, b) => (a.bpm ?? 0) - (b.bpm ?? 0));
     if (sort === "bpmDesc") beats.sort((a, b) => (b.bpm ?? 0) - (a.bpm ?? 0));
-    // "new" ya viene en orden (creadoAt descend por construcción)
 
     return (
       <ClientCatalog
