@@ -3,17 +3,29 @@ import Credentials from "next-auth/providers/credentials";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import { z } from "zod";
 import bcrypt from "bcryptjs";
-import prisma from "@/lib/prisma"; // OK si tu lib/prisma exporta default. Si exporta named, cámbialo a: import { prisma } from "@/lib/prisma";
+import prisma from "@/lib/prisma";
+import type { JWT } from "next-auth/jwt";
+
+
 
 const credentialsSchema = z.object({
   email: z.string().email(),
   password: z.string().min(6),
 });
 
-export const { handlers, auth, signIn, signOut } = NextAuth({
-  adapter: PrismaAdapter(prisma),
+type Role = "USER" | "ADMIN";
+type SubscriptionStatus = "INACTIVE" | "ACTIVE" | "PAST_DUE" | "CANCELED";
 
-  // ✅ REQUIRED para Credentials en v5
+type AppJWT = JWT & {
+  id?: string;
+  role?: Role;
+  subscriptionStatus?: SubscriptionStatus;
+};
+
+export const { handlers, auth, signIn, signOut } = NextAuth({
+   adapter: PrismaAdapter(prisma as unknown as Parameters<typeof PrismaAdapter>[0]),
+
+  // Required: Credentials provider works with JWT session strategy
   session: { strategy: "jwt" },
 
   providers: [
@@ -31,12 +43,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
 
         const user = await prisma.user.findUnique({
           where: { email },
-          select: {
-            id: true,
-            email: true,
-            name: true,
-            passwordHash: true,
-          },
+          select: { id: true, email: true, name: true, passwordHash: true },
         });
 
         if (!user?.passwordHash) return null;
@@ -54,42 +61,39 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   ],
 
   callbacks: {
-    // ✅ Mete datos en el JWT
     jwt: async ({ token, user }) => {
-      // En el primer login, `user` viene de authorize()
-      if (user) {
-        token.id = user.id;
-      }
+      const t = token as AppJWT;
 
-      const id = (token.id ?? token.sub) as string | undefined;
-      if (!id) return token;
+      // primer login
+      if (user?.id) t.id = user.id;
 
-      // Evita query en cada request si ya tenemos los campos
-      if (token.role && token.subscriptionStatus) return token;
+      const id = t.id ?? t.sub;
+      if (!id) return t;
+
+      // evita query si ya lo tenemos
+      if (t.role && t.subscriptionStatus) return t;
 
       const dbUser = await prisma.user.findUnique({
         where: { id },
         select: { role: true, subscriptionStatus: true },
       });
 
-      token.id = id;
-      token.role = dbUser?.role ?? "USER";
-      token.subscriptionStatus = dbUser?.subscriptionStatus ?? "INACTIVE";
+      t.id = id;
+      t.role = (dbUser?.role ?? "USER") as Role;
+      t.subscriptionStatus = (dbUser?.subscriptionStatus ?? "INACTIVE") as SubscriptionStatus;
 
-      return token;
+      return t;
     },
 
-    // ✅ Expone en session.user sin usar any
     session: async ({ session, token }) => {
-      const id = (token.id ?? token.sub) as string | undefined;
-      if (id) session.user.id = id;
+      const t = token as AppJWT;
+      const id = t.id ?? t.sub;
 
-      session.user.role = (token.role ?? "USER") as "USER" | "ADMIN";
-      session.user.subscriptionStatus = (token.subscriptionStatus ?? "INACTIVE") as
-        | "INACTIVE"
-        | "ACTIVE"
-        | "PAST_DUE"
-        | "CANCELED";
+      if (session.user && id) session.user.id = id;
+      if (session.user) {
+        session.user.role = (t.role ?? "USER") as Role;
+        session.user.subscriptionStatus = (t.subscriptionStatus ?? "INACTIVE") as SubscriptionStatus;
+      }
 
       return session;
     },
